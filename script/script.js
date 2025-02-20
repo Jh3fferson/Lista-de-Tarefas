@@ -117,6 +117,9 @@ function lineThrought(text,li){
   if(text === "Concluída"){
     li.querySelector("span").style.textDecoration = "line-through";
   }
+  else{
+    li.querySelector("span").style.textDecoration = "none"
+  }
 }
 
 
