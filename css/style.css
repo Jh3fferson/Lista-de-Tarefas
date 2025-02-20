@@ -1,0 +1,103 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@100..900&display=swap');
+
+
+body{
+    padding:0;
+    margin: 0;
+    box-sizing: border-box;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+background-color: bisque;
+
+}
+
+
+#div-h1 {
+margin: 0;  
+text-align: center;
+font-family: "Roboto Slab", serif;
+font-size: 25px;
+}
+
+#div-form {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+   
+}
+
+#todo-form {
+    height: 10rem;
+    
+    justify-content: center;
+    text-align: center;
+   
+
+}
+
+#task-title-input{
+    width: 19rem;
+    height: 1.5rem;
+    border-radius: 5px;
+  
+    
+}
+
+#priority-select{
+    width: 8rem;
+    height: 1.9rem;
+    border-radius: 10px;
+
+}
+
+#form-button{
+    width: 8rem;
+    height: 1.9rem;
+    border-radius: 5px;
+    background-color: rgb(8, 197, 255);
+    color:white;
+    border: rgb(8, 197, 255);
+}
+#form-button:hover {
+    background-color: rgb(82, 186, 255);
+    border: black;
+}
+
+#todo-list {
+    list-style: none;
+    padding: 0;
+    margin: 20px 0 0;
+    
+}
+
+#todo-list li {
+    display: flex; /* Alinha os elementos em linha */
+    justify-content: space-between; /* Garante que os elementos fiquem afastados */
+    align-items: center; /* Centraliza verticalmente */
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    background-color: #ffffff;
+
+
+}
+
+#todo-list button {
+    display: flex; /* Alinha os elementos em linha */
+    justify-content: space-between; /* Garante que os elementos fiquem afastados */
+    align-items: center; /* Centraliza verticalmente */
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    background-color: #ffffff;
+    color: white;
+    background-color: red;
+}
+
+#todo-list button:hover {
+background-color: rgb(255, 72, 72);
+}

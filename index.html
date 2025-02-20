@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/style.css">
+    <title>Lista de Tarefas</title>
+</head>
+<body>
+    <header>
+        <img src="https://cdn-icons-png.flaticon.com/512/1940/1940308.png" alt="lista">
+    </header>
+<main>
+    <div id="div-h1">
+        <h1>Lista de Tarefas</h1>
+    </div>
+    <div id="div-form">
+        
+        <form id="todo-form">
+              <input type="text" placeholder="Informe a sua tarefa..." id="task-title-input">
+              <select name="Prioridade" id="priority-select">
+                  <option value="0">Prioridade</option>
+                  <option value="Alta">Alta</option>
+                  <option value="Média">Média</option>
+                  <option value="Baixa">Baixa</option>
+                </select>
+                <button type="submit" id="form-button" >Adicionar
+                </button>
+                <section>
+                    <ul id="todo-list"></ul>
+                </section>
+            </form>
+        </div>
+</main>
+    <footer></footer>
+<script src="script/script.js"></script>
+</body>
+</html>
