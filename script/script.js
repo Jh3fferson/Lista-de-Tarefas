@@ -46,6 +46,7 @@ todoListUl.addEventListener("change", function (event) { // Salva qual é o stat
       }
     }
     localStorage.setItem("tasks", JSON.stringify(tasks));
+    lineThrought(text,li);
   }
 });
 
@@ -66,6 +67,7 @@ function createList(task) { // Cria a lista de tarefas de acordo com o que está
   li.appendChild(button);
 
   defineStyle(li, select, task.priority);
+  lineThrought(task.status, li);
   selectedOption(task, select);
 }
 
@@ -111,8 +113,14 @@ function selectedOption(task, select) { // Pega qual foi o último estado de sta
   }
 }
 
+function lineThrought(text,li){
+  if(text === "Concluída"){
+    li.querySelector("span").style.textDecoration = "line-through";
+  }
+}
 
-function defineStyle(li, select, priority) { // Define o style do css de elementos dinâmicos
+
+function defineStyle(li, select, priority,span,status) { // Define o style do css de elementos dinâmicos
   li.style.color = colorsOfPriority(priority);
   li.style.background = "rgb(236, 233, 233)";
   select.style.background = "rgb(157, 192, 183)";
