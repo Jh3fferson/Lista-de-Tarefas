@@ -81,8 +81,13 @@ font-size: 25px;
     border-radius: 5px;
     margin-bottom: 10px;
     background-color: #ffffff;
+    
+    
 
-
+}
+#todo-list span{
+    width: 30rem;
+    word-wrap: break-word;
 }
 
 #todo-list button {

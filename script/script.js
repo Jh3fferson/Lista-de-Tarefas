@@ -79,7 +79,6 @@ function StorageTasks(taskTitle, taskPriorityValue) { // Armazena a tarefa no Lo
     status: "Pendente"
   });
 
-
   let priorityOfSort = ["Alta", "Média", "Baixa"];
   let tasksSort = [];
   for (const p of priorityOfSort) {
