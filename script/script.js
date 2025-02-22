@@ -1,14 +1,47 @@
-const taskTitleInput = document.querySelector("#task-title-input");
-const form = document.querySelector("#todo-form");
-const todoListUl = document.querySelector("#todo-list");
-const prioritySelect = document.getElementById("priority-select");
+const taskTitleInput = document.querySelector('#task-title-input');
+const form = document.querySelector('#todo-form');
+const todoListUl = document.querySelector('#todo-list');
+const prioritySelect = document.getElementById('priority-select');
 
 window.onload = function () { // Garante que as informações salvas anteriomente irão aparecer quando a página for recarregada
-  recreateList();
+  loadTasksIntoList();
 };
 
 
-form.addEventListener("submit", (event) => {// Cria uma nova tarefa
+form.addEventListener("submit", (event) => {// Chama a função para criar uma tarefa caso seja acionado o elemento form-button
+  createTask(event)
+});
+taskTitleInput.addEventListener("keydown", (event) => {// Chama a função para criar uma tarefa caso seja acionado a tecla Enter no elemento task-title-input
+  if (event.key === "Enter") {
+    createTask(event);
+  }
+});
+
+todoListUl.addEventListener("click", function (event) {// Remove a tarefa que pertence ao botão que recebeu o evento click
+  if (event.target.tagName === "BUTTON") {
+    const li = event.target.parentNode;
+    const index = li.getAttribute('data-index');
+    let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
+    tasks.splice(index,1);
+    li.remove();
+    localStorage.setItem("tasks", JSON.stringify(tasks));
+  }
+});
+
+todoListUl.addEventListener("change", function (event) { // Salva qual é o status da tarefa no LocalStorage
+  if (event.target.tagName === "SELECT") {
+    const li = event.target.closest('li');
+    const newStatus = li.querySelector('select').value;
+    const index = li.getAttribute('data-index'); 
+    let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
+    tasks[index].status = newStatus;
+    applyTaskStyles(tasks[index], li)
+    
+    localStorage.setItem("tasks", JSON.stringify(tasks));
+  }
+});
+
+function createTask(event) { // Cria uma nova tarefa
   event.preventDefault(); // Evita o comportamento padrão de recarregar a página ao submeter o formulário
 
   const taskTitle = taskTitleInput.value;
@@ -19,39 +52,47 @@ form.addEventListener("submit", (event) => {// Cria uma nova tarefa
     return;
   }
 
-  recreateList(taskTitle, taskPriorityValue);
+  saveTask(taskTitle, taskPriorityValue);
   taskTitleInput.value = ""; // apagar o que o usúario digitou dentro do input quando for adicionado
-});
+}
 
-todoListUl.addEventListener("click", function (event) {// Remove a tarefa que pertence ao botão que recebeu o evento click
-  if (event.target.tagName === "BUTTON") {
-    const li = event.target.parentNode;
-    const titleToRemove = li.querySelector("span").textContent;
-    let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
-    tasks = tasks.filter((t) => t.title !== titleToRemove);
-    li.remove();
+function saveTask(taskTitle, taskPriorityValue) { // Armazena a tarefa no LocalStorage
+  let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
+    tasks.push({
+      title: taskTitle,
+      priority: taskPriorityValue,
+      status: "Pendente"
+    });
+    tasks = sortTasksByPriority(tasks);
     localStorage.setItem("tasks", JSON.stringify(tasks));
-  }
-});
+    loadTasksIntoList();
 
-todoListUl.addEventListener("change", function (event) { // Salva qual é o status da tarefa no LocalStorage
-  if (event.target.tagName === "SELECT") {
-    const li = event.target.parentNode;
-    const titleToChange = li.querySelector("span").textContent;
-    const text = li.querySelector("select").value;
-    let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
-    for (n in tasks) {
-      if (tasks[n].title == titleToChange) {
-        tasks[n].status = text;
-      }
-    }
-    localStorage.setItem("tasks", JSON.stringify(tasks));
-    lineThrought(text,li);
-  }
-});
+  return tasks;
+}
 
-function createList(task) { // Cria a lista de tarefas de acordo com o que está no LocalStorage
+function sortTasksByPriority(tasks){
+  let priority = {"Alta":1, "Média":2, "Baixa":3};
+  return tasks.sort((a, b) => priority[a.priority] - priority[b.priority]);
+
+}
+
+function loadTasksIntoList(){
+  const tasks = JSON.parse(localStorage.getItem("tasks")) || [];
+  cleanList();
+  tasks.forEach((task, index) => {
+    createList(task, index);  // Passa o índice junto com a tarefa
+  });
+}
+
+function cleanList(){
+  while (todoListUl.firstChild) {
+    todoListUl.removeChild(todoListUl.firstChild);
+  }
+}
+
+function createList(task, index) { // Cria a lista de tarefas de acordo com o que está no LocalStorage
   const li = document.createElement('li');
+  li.setAttribute('data-index', index);
   todoListUl.appendChild(li);
 
   const select = document.createElement('select');
@@ -63,84 +104,35 @@ function createList(task) { // Cria a lista de tarefas de acordo com o que está
 
   const button = document.createElement('button');
   button.textContent = "Remover";
-  button.setAttribute('type', 'submit');
+  button.type = 'submit';
   li.appendChild(button);
 
-  defineStyle(li, select, task.priority);
-  lineThrought(task.status, li);
+  applyTaskStyles(task, li);
   selectedOption(task, select);
-}
-
-function StorageTasks(taskTitle, taskPriorityValue) { // Armazena a tarefa no LocalStorage
-  document.getElementById("todo-list").innerHTML = "";
-  let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
-  tasks.push({
-    title: taskTitle,
-    priority: taskPriorityValue,
-    done: false,
-    status: "Pendente"
-  });
-
-  let priorityOfSort = ["Alta", "Média", "Baixa"];
-  let tasksSort = [];
-  for (const p of priorityOfSort) {
-    for (const n in tasks) {
-      if (tasks[n].priority === p) {
-        tasksSort.push(tasks[n]);
-        continue;
-      }
-    }
-  }
-  tasks = tasksSort;
-  localStorage.setItem("tasks", JSON.stringify(tasks));
-  return tasks;
-}
-
-function recreateList(taskTitle, taskPriorityValue) { // Recria a lista se necessário atualizar
-  for (const n of StorageTasks(taskTitle, taskPriorityValue)) {
-    createList(n);
-  }
 }
 
 function selectedOption(task, select) { // Pega qual foi o último estado de status no LocalStorage e recupera a escolha feita
   const option = [document.createElement('option'), document.createElement('option'), document.createElement('option')];
   let status = ["Pendente", "Em andamento", "Concluída"];
-  status = status.filter((t) => t !== task.status);
-  status.unshift(task.status);
   for (const n in option) {
     option[n].textContent = status[n];
     select.appendChild(option[n]);
   }
+  select.value = task.status;
 }
 
-function lineThrought(text,li){
-  if(text === "Concluída"){
-    li.querySelector("span").style.textDecoration = "line-through";
-  }
-  else{
-    li.querySelector("span").style.textDecoration = "none"
-  }
-}
-
-
-function defineStyle(li, select, priority,span,status) { // Define o style do css de elementos dinâmicos
-  li.style.color = colorsOfPriority(priority);
-  li.style.background = "rgb(236, 233, 233)";
-  select.style.background = "rgb(157, 192, 183)";
-  select.style.borderRadius = "5px"
-  select.style.height = "1.9rem"
-  select.style.border = "none"
-  select.style.color = "rgba(255, 255, 255, 0.86)"
-}
-
-function colorsOfPriority(priority) { // Define as cores que serão usadas nos títulos das tarefas
-  if (priority === "Alta") {
-    return "rgb(131, 25, 25)";
-  }
-  else if (priority === "Média") {
-    return "rgb(212, 150, 14)";
-  }
-  else if (priority === "Baixa") {
-    return "rgb(40, 100, 55)";
-  }
+function applyTaskStyles(task, li) {// Define a cor do texto da tarefa de acordo com a prioridade e também define o text decoration de acordo com o status da tarefa 
+  let color = {
+    "Alta" : "rgb(131, 25, 25)",
+    "Média" : "rgb(212, 150, 14)",
+    "Baixa" : "rgb(40, 100, 55)"
+  };
+  let lineStyle = {
+    "Concluída" : "line-through",
+    "Em andamento" : "underline",
+    "Pendente" : "none"
+  };
+ 
+  li.querySelector('span').style.textDecoration = lineStyle[task.status] || "none";
+  li.style.color = color[task.priority] || "black";
 }

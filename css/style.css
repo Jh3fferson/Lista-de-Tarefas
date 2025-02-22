@@ -80,13 +80,20 @@ font-size: 25px;
     border: 1px solid #ccc;
     border-radius: 5px;
     margin-bottom: 10px;
-    background-color: #ffffff;
-    
-    
+    background-color: rgb(236, 233, 233);
 
 }
+
+#todo-list li select{
+    background-color : rgb(157, 192, 183);
+    border-radius: 5px;
+    height: 1.9rem;
+    border: none;
+    color: rgba(255, 255, 255, 0.86);
+}
+
 #todo-list span{
-    width: 30rem;
+    width: 15rem;
     word-wrap: break-word;
 }
 
