@@ -19,14 +19,17 @@
         
         <form id="todo-form">
               <input type="text" placeholder="Informe a sua tarefa..." id="task-title-input" maxlength="500">
-              <select name="Prioridade" id="priority-select">
-                  <option value="0">Prioridade</option>
+              <select name="priority" id="priority-select">
+                  <option value="">Prioridade</option>
                   <option value="Alta">Alta</option>
                   <option value="Média">Média</option>
                   <option value="Baixa">Baixa</option>
                 </select>
                 <button type="submit" id="form-button" >Adicionar
                 </button>
+                <div id="error">
+                    <span id="message-error"></span>
+                </div>
                 <section>
                     <ul id="todo-list"></ul>
                 </section>
@@ -34,6 +37,6 @@
         </div>
 </main>
     <footer></footer>
-<script src="script/script.js"></script>
+<script type="module" src="js/index.js"></script>
 </body>
 </html>
